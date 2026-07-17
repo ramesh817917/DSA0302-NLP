@@ -1,0 +1,27 @@
+import re
+reg_no = "22CSE101"
+email = "student@university.edu"
+course = "CS301"
+semester = "5"
+mobile = "9876543210"
+reg = re.fullmatch(r"\d{2}[A-Z]{3}\d{3}", reg_no)
+mail = re.fullmatch(r"[a-zA-Z0-9._%+-]+@university\.edu", email)
+code = re.fullmatch(r"[A-Z]{2}\d{3}", course)
+sem = re.fullmatch(r"[1-8]", semester)
+phone = re.fullmatch(r"\d{10}", mobile)
+print("Register Number:", "Valid" if reg else "Invalid")
+print("Email:", "Valid" if mail else "Invalid")
+print("Course Code:", "Valid" if code else "Invalid")
+print("Semester:", "Valid" if sem else "Invalid")
+print("Mobile:", "Valid" if phone else "Invalid")
+if reg and mail and code and sem and phone:
+    print("\nRegistration Successful")
+else:
+print("\nRegistration Failed")
+Output:
+Register Number: Valid
+Email: Valid
+Course Code: Valid
+Semester: Valid
+Mobile: Valid
+Registration Successful
