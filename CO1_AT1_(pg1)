@@ -1,0 +1,32 @@
+import re
+resume = """
+Name: Ramesh Kumar
+Email: ramesh@gmail.com
+Mobile: 9876543210
+Skills: Python, Java, SQL
+Experience: 3 years
+"""
+name = re.search(r"Name:\s*(.*)", resume).group(1)
+email = re.search(r"\S+@\S+\.\S+", resume).group()
+mobile = re.search(r"\d{10}", resume).group()
+exp = int(re.search(r"(\d+)\s+years", resume).group(1))
+skills = []
+for skill in ["Python", "Java", "SQL", "Machine Learning", "NLP"]:
+    if re.search(skill, resume, re.I):
+        skills.append(skill)
+print("Name:", name)
+print("Email:", email)
+print("Mobile:", mobile)
+print("Skills:", skills)
+print("Experience:", exp, "Years")
+if exp >= 2 and "Python" in skills:
+    print("Eligible")
+else:
+    print("Not Eligible")
+Output:
+Name: Ramesh Kumar
+Email: ramesh@gmail.com
+Mobile: 9876543210
+Skills: ['Python', 'Java', 'SQL']
+Experience: 3 Years
+Eligible
