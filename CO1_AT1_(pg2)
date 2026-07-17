@@ -1,0 +1,39 @@
+import re
+products = [
+    "Apple iPhone",
+    "Apple Watch",
+    "Samsung Galaxy",
+    "Galaxy Buds",
+    "Dell Laptop",
+    "HP Laptop",
+    "Wireless Mouse",
+    "Gaming Mouse"
+]
+keyword = "Apple"
+# Exact Search
+exact = [p for p in products if re.fullmatch(keyword, p, re.I)]
+# Prefix Search
+prefix = [p for p in products if re.match(keyword, p, re.I)]
+# Suffix Search
+suffix = [p for p in products if re.search(keyword + r"$", p, re.I)]
+# Partial Search
+partial = [p for p in products if re.search(keyword, p, re.I)]
+print("Exact Search:", exact)
+print("Prefix Search:", prefix)
+print("Suffix Search:", suffix)
+print("Partial Search:", partial)
+print("\nReport")
+print("Exact Matches:", len(exact))
+print("Prefix Matches:", len(prefix))
+print("Suffix Matches:", len(suffix))
+print("Partial Matches:", len(partial))
+Output:
+Exact Search: []
+Prefix Search: ['Apple iPhone', 'Apple Watch']
+Suffix Search: []
+Partial Search: ['Apple iPhone', 'Apple Watch']
+Report
+Exact Matches: 0
+Prefix Matches: 2
+Suffix Matches: 0
+Partial Matches: 2
