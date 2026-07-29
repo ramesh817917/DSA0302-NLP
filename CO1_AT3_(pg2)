@@ -1,0 +1,45 @@
+# DFA Simulator for strings ending with "ab"
+
+states = ['q0', 'q1', 'q2']
+alphabet = ['a', 'b']
+
+transition = {
+    ('q0', 'a'): 'q1',
+    ('q0', 'b'): 'q0',
+    ('q1', 'a'): 'q1',
+    ('q1', 'b'): 'q2',
+    ('q2', 'a'): 'q1',
+    ('q2', 'b'): 'q0'
+}
+
+initial_state = 'q0'
+final_state = 'q2'
+
+while True:
+    string = input("\nEnter Input String (or 'exit'): ")
+
+    if string.lower() == "exit":
+        break
+
+    current = initial_state
+    path = [current]
+    valid = True
+
+    for ch in string:
+        if ch not in alphabet:
+            valid = False
+            break
+        current = transition[(current, ch)]
+        path.append(current)
+
+    if not valid:
+        print("Invalid Input (Only a and b allowed)")
+        continue
+
+    print("Transition Path:")
+    print(" -> ".join(path))
+
+    if current == final_state:
+        print("Accepted")
+    else:
+        print("Rejected")
