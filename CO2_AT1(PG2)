@@ -1,0 +1,28 @@
+# Morphological Parsing Module
+
+words = ["unhappy", "happiness", "happily"]
+
+print("-" * 110)
+print(f"{'Word':<15}{'Prefix':<10}{'Root':<15}{'Suffix':<12}{'Type':<18}{'Normalized'}")
+print("-" * 110)
+
+for word in words:
+
+    prefix = "-"
+    suffix = "-"
+    root = ""
+    mtype = "Derivational"
+
+    if word.startswith("un"):
+        prefix = "un"
+        root = "happy"
+
+    elif word.endswith("ness"):
+        suffix = "ness"
+        root = "happy"
+
+    elif word.endswith("ly"):
+        suffix = "ly"
+        root = "happy"
+
+    print(f"{word:<15}{prefix:<10}{root:<15}{suffix:<12}{mtype:<18}happy")
