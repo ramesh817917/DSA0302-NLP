@@ -1,0 +1,29 @@
+# Porter Stemmer Demonstration
+
+from nltk.stem import PorterStemmer
+
+ps = PorterStemmer()
+
+words = ["relational", "relation", "relate"]
+
+print("-" * 130)
+print(f"{'Word':<15}{'Rule Applied':<30}{'Intermediate':<25}{'Final Stem'}")
+print("-" * 130)
+
+for word in words:
+
+    if word == "relational":
+        rule = "remove 'ational'"
+        intermediate = "relate"
+
+    elif word == "relation":
+        rule = "remove 'ion'"
+        intermediate = "relate"
+
+    else:
+        rule = "remove 'e'"
+        intermediate = "relat"
+
+    stem = ps.stem(word)
+
+    print(f"{word:<15}{rule:<30}{intermediate:<25}{stem}")
