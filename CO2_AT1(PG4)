@@ -1,0 +1,26 @@
+# Finite-State Morphological Parser
+
+words = ["writes", "writing", "written"]
+
+print("-" * 140)
+print(f"{'Word':<15}{'Transition':<45}{'Pattern':<15}{'Root':<15}{'Normalized'}")
+print("-" * 140)
+
+for word in words:
+
+    if word == "writes":
+        transition = "Start -> write -> +s -> Final"
+        pattern = "Regular"
+        root = "write"
+
+    elif word == "writing":
+        transition = "Start -> write -> +ing -> Final"
+        pattern = "Regular"
+        root = "write"
+
+    elif word == "written":
+        transition = "Start -> write -> irregular -> Final"
+        pattern = "Irregular"
+        root = "write"
+
+    print(f"{word:<15}{transition:<45}{pattern:<15}{root:<15}write")
