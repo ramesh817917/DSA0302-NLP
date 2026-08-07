@@ -1,0 +1,66 @@
+# Question 2: Rule-Based Morphological Parser
+
+words = ["disagree", "agreement", "agreeable"]
+
+
+def parse_word(word):
+    word = word.lower()
+
+    if word == "disagree":
+        return {
+            "original": word,
+            "prefix": "dis-",
+            "root": "agree",
+            "suffix": "",
+            "category": "Derivational - Prefix",
+            "meaning": "dis- changes agree to mean not agree or oppose",
+            "normalized": "agree"
+        }
+
+    elif word == "agreement":
+        return {
+            "original": word,
+            "prefix": "",
+            "root": "agree",
+            "suffix": "-ment",
+            "category": "Derivational - Suffix",
+            "meaning": "-ment changes the verb agree into a noun meaning a state or result of agreeing",
+            "normalized": "agree"
+        }
+
+    elif word == "agreeable":
+        return {
+            "original": word,
+            "prefix": "",
+            "root": "agree",
+            "suffix": "-able",
+            "category": "Derivational - Suffix",
+            "meaning": "-able creates an adjective meaning pleasant or acceptable",
+            "normalized": "agree"
+        }
+
+    return {
+        "original": word,
+        "prefix": "",
+        "root": word,
+        "suffix": "",
+        "category": "Unknown",
+        "meaning": "No rule found",
+        "normalized": word
+    }
+
+
+print("MORPHOLOGICAL PARSER REPORT")
+print("=" * 100)
+
+for word in words:
+    result = parse_word(word)
+
+    print("Original Word       :", result["original"])
+    print("Prefix              :", result["prefix"] or "None")
+    print("Root Word           :", result["root"])
+    print("Suffix              :", result["suffix"] or "None")
+    print("Transformation     :", result["category"])
+    print("Semantic Meaning    :", result["meaning"])
+    print("Normalized Base     :", result["normalized"])
+    print("-" * 100)
