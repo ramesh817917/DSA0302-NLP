@@ -1,0 +1,68 @@
+# Question 4: Morphological Parsing and Normalization
+
+words = ["activate", "activation", "reactivation"]
+
+
+def parse_word(word):
+    word = word.lower()
+
+    if word == "activate":
+        return {
+            "original": word,
+            "prefix": "None",
+            "root": "activate",
+            "suffix": "None",
+            "sequence": "activate",
+            "meaning": "To make something active",
+            "normalized": "activate"
+        }
+
+    elif word == "activation":
+        return {
+            "original": word,
+            "prefix": "None",
+            "root": "activate",
+            "suffix": "-ion",
+            "sequence": "activate → activation",
+            "meaning": "The process or act of becoming active",
+            "normalized": "activate"
+        }
+
+    elif word == "reactivation":
+        return {
+            "original": word,
+            "prefix": "re-",
+            "root": "activate",
+            "suffix": "-ion",
+            "sequence": "activate → reactivate → reactivation",
+            "meaning": "The process of becoming active again",
+            "normalized": "activate"
+        }
+
+    return {
+        "original": word,
+        "prefix": "None",
+        "root": word,
+        "suffix": "None",
+        "sequence": "Unknown",
+        "meaning": "Unknown",
+        "normalized": word
+    }
+
+
+print("MORPHOLOGICAL PARSING REPORT")
+print("=" * 110)
+
+for word in words:
+    result = parse_word(word)
+
+    print("Original Word       :", result["original"])
+    print("Prefix              :", result["prefix"])
+    print("Root Word           :", result["root"])
+    print("Suffix              :", result["suffix"])
+    print("Derivational Sequence:", result["sequence"])
+    print("Semantic Meaning    :", result["meaning"])
+    print("Normalized Base     :", result["normalized"])
+    print("Final Representation:", 
+          result["prefix"], "+", result["root"], "+", result["suffix"])
+    print("-" * 110)
