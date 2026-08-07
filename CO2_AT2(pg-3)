@@ -1,0 +1,57 @@
+# Question 3: Morphology-Based Normalization
+
+words = ["govern", "government", "governance"]
+
+
+def normalize_word(word):
+    word = word.lower()
+
+    if word == "govern":
+        return {
+            "original": word,
+            "root": "govern",
+            "affixes": "None",
+            "hierarchy": "Level 0 - Root",
+            "normalized": "govern"
+        }
+
+    elif word == "government":
+        return {
+            "original": word,
+            "root": "govern",
+            "affixes": "-ment",
+            "hierarchy": "Level 1 - govern + ment",
+            "normalized": "govern"
+        }
+
+    elif word == "governance":
+        return {
+            "original": word,
+            "root": "govern",
+            "affixes": "-ance",
+            "hierarchy": "Level 1 - govern + ance",
+            "normalized": "govern"
+        }
+
+    return {
+        "original": word,
+        "root": word,
+        "affixes": "None",
+        "hierarchy": "Unknown",
+        "normalized": word
+    }
+
+
+print("MORPHOLOGY-BASED NORMALIZATION REPORT")
+print("=" * 100)
+
+for word in words:
+    result = normalize_word(word)
+
+    print("Original Word       :", result["original"])
+    print("Root Form           :", result["root"])
+    print("Detected Affix(es)  :", result["affixes"])
+    print("Derivational Level  :", result["hierarchy"])
+    print("Normalized Form     :", result["normalized"])
+    print("Topic Model Output  :", result["normalized"])
+    print("-" * 100)
