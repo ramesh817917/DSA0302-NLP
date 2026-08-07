@@ -1,0 +1,57 @@
+# Question 5: Inflectional Morphology-Based Normalization
+
+words = ["create", "creates", "creating"]
+
+
+def analyze_word(word):
+    word = word.lower()
+
+    if word == "create":
+        return {
+            "original": word,
+            "suffix": "None",
+            "category": "Base Form",
+            "root": "create",
+            "normalized": "create"
+        }
+
+    elif word == "creates":
+        return {
+            "original": word,
+            "suffix": "-s",
+            "category": "Third-Person Singular Present",
+            "root": "create",
+            "normalized": "create"
+        }
+
+    elif word == "creating":
+        return {
+            "original": word,
+            "suffix": "-ing",
+            "category": "Present Participle / Progressive",
+            "root": "create",
+            "normalized": "create"
+        }
+
+    return {
+        "original": word,
+        "suffix": "None",
+        "category": "Unknown",
+        "root": word,
+        "normalized": word
+    }
+
+
+print("INFLECTIONAL MORPHOLOGY REPORT")
+print("=" * 100)
+
+for word in words:
+    result = analyze_word(word)
+
+    print("Original Word       :", result["original"])
+    print("Identified Suffix   :", result["suffix"])
+    print("Grammatical Category:", result["category"])
+    print("Extracted Root      :", result["root"])
+    print("Normalized Base     :", result["normalized"])
+    print("Final Representation:", result["normalized"])
+    print("-" * 100)
