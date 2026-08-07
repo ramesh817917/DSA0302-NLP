@@ -1,0 +1,64 @@
+# Question 1: Rule-Based Morphological Processing
+
+words = ["analyzing", "analysis", "analytical"]
+
+
+def analyze_word(word):
+    word = word.lower()
+
+    # Rule 1: analyzing -> analyze + ing
+    if word == "analyzing":
+        return {
+            "original": word,
+            "root": "analyze",
+            "prefix": "",
+            "suffix": "ing",
+            "transformation": "Inflectional",
+            "normalized": "analyze"
+        }
+
+    # Rule 2: analysis -> analy + sis
+    elif word == "analysis":
+        return {
+            "original": word,
+            "root": "analy",
+            "prefix": "",
+            "suffix": "sis",
+            "transformation": "Derivational",
+            "normalized": "analyze"
+        }
+
+    # Rule 3: analytical -> analyt + ical
+    elif word == "analytical":
+        return {
+            "original": word,
+            "root": "analyt",
+            "prefix": "",
+            "suffix": "ical",
+            "transformation": "Derivational",
+            "normalized": "analyze"
+        }
+
+    return {
+        "original": word,
+        "root": word,
+        "prefix": "",
+        "suffix": "",
+        "transformation": "Unknown",
+        "normalized": word
+    }
+
+
+print("MORPHOLOGICAL PROCESSING REPORT")
+print("-" * 100)
+
+for word in words:
+    result = analyze_word(word)
+
+    print("Original Word :", result["original"])
+    print("Root          :", result["root"])
+    print("Prefix        :", result["prefix"] or "None")
+    print("Suffix        :", result["suffix"] or "None")
+    print("Transformation:", result["transformation"])
+    print("Normalized    :", result["normalized"])
+    print("-" * 100)
