@@ -1,0 +1,85 @@
+import re
+from collections import Counter
+
+corpus = """
+The student is studying computer science.
+The student is reading a book.
+The student is writing a program.
+The teacher is teaching computer science.
+The teacher is reading a book.
+The student likes computer science.
+The student likes reading books.
+"""
+
+sentences = re.split(r'[.!?]', corpus.lower())
+
+unigram = Counter()
+bigram = Counter()
+trigram = Counter()
+
+for sentence in sentences:
+    words = re.findall(r'\b[a-z]+\b', sentence)
+
+    unigram.update(words)
+
+    for i in range(len(words) - 1):
+        bigram[(words[i], words[i + 1])] += 1
+
+    for i in range(len(words) - 2):
+        trigram[(words[i], words[i + 1], words[i + 2])] += 1
+
+
+def unigram_probability(word):
+    return unigram[word] / sum(unigram.values())
+
+
+def bigram_probability(w1, w2):
+    if unigram[w1] == 0:
+        return 0
+    return bigram[(w1, w2)] / unigram[w1]
+
+
+def trigram_probability(w1, w2, w3):
+    if bigram[(w1, w2)] == 0:
+        return 0
+    return trigram[(w1, w2, w3)] / bigram[(w1, w2)]
+
+
+n = int(input("Enter N (1, 2 or 3): "))
+sentence = input("Enter incomplete sentence: ").lower().split()
+
+predictions = []
+
+if n == 1:
+    for word in unigram:
+        predictions.append((word, unigram_probability(word)))
+
+elif n == 2:
+    last = sentence[-1]
+
+    for word in unigram:
+        p = bigram_probability(last, word)
+
+        if p > 0:
+            predictions.append((word, p))
+
+elif n == 3:
+    w1 = sentence[-2]
+    w2 = sentence[-1]
+
+    for word in unigram:
+        p = trigram_probability(w1, w2, word)
+
+        if p > 0:
+            predictions.append((word, p))
+
+predictions.sort(key=lambda x: x[1], reverse=True)
+
+print("\nTop 5 Predictions:")
+
+for word, probability in predictions[:5]:
+    print(word, "->", round(probability, 4))
+
+print("\nUnseen N-gram Example:")
+print("P(student | computer) =",
+      bigram_probability("computer", "student"))
