@@ -1,0 +1,168 @@
+import re
+from collections import Counter, defaultdict
+
+training = [
+    ("the", "DT"),
+    ("student", "NN"),
+    ("is", "VB"),
+    ("reading", "VBG"),
+    ("a", "DT"),
+    ("book", "NN"),
+    ("teacher", "NN"),
+    ("teaches", "VBZ"),
+    ("computer", "NN"),
+    ("science", "NN"),
+    ("he", "PRP"),
+    ("likes", "VBZ"),
+    ("very", "RB"),
+    ("good", "JJ"),
+    ("and", "CC"),
+    ("in", "IN"),
+    ("class", "NN")
+]
+
+word_tag = defaultdict(Counter)
+transition = defaultdict(Counter)
+
+for i, (word, tag) in enumerate(training):
+
+    word_tag[word][tag] += 1
+
+    if i > 0:
+        previous = training[i - 1][1]
+        transition[previous][tag] += 1
+
+
+pronouns = {
+    "i", "you", "he", "she", "we", "they", "it"
+}
+
+determiners = {
+    "a", "an", "the"
+}
+
+prepositions = {
+    "in", "on", "at", "with", "from", "to"
+}
+
+conjunctions = {
+    "and", "or", "but"
+}
+
+adverbs = {
+    "very", "quickly", "slowly"
+}
+
+verbs = {
+    "is", "am", "are", "was", "were",
+    "read", "reading", "write", "writing",
+    "likes", "teaches", "study", "studying"
+}
+
+
+def rule_based(word):
+
+    if word in pronouns:
+        return "PRP"
+
+    if word in determiners:
+        return "DT"
+
+    if word in prepositions:
+        return "IN"
+
+    if word in conjunctions:
+        return "CC"
+
+    if word in adverbs:
+        return "RB"
+
+    if word in verbs:
+        return "VB"
+
+    if word.endswith("ly"):
+        return "RB"
+
+    if word.endswith("ing"):
+        return "VBG"
+
+    if word.endswith("ous"):
+        return "JJ"
+
+    if word.endswith("ful"):
+        return "JJ"
+
+    return "NN"
+
+
+def stochastic_tag(word, previous=None):
+
+    if word not in word_tag:
+        return "NN"
+
+    tags = word_tag[word]
+
+    if previous is None:
+        return max(tags, key=tags.get)
+
+    return max(
+        tags,
+        key=lambda tag:
+        tags[tag] *
+        (transition[previous][tag] + 1)
+    )
+
+
+def transformation_tag(words):
+
+    tags = [rule_based(word) for word in words]
+
+    for i in range(len(words)):
+
+        if i > 0 and tags[i - 1] == "PRP":
+            if tags[i] == "NN":
+                tags[i] = "VB"
+
+        if i > 0 and tags[i - 1] == "VB":
+            if words[i].endswith("ing"):
+                tags[i] = "VBG"
+
+    return tags
+
+
+sentence = input("Enter a sentence: ").lower()
+
+words = re.findall(
+    r'\b[a-z]+\b',
+    sentence
+)
+
+
+print("\nRule-Based POS Tagging:")
+
+for word in words:
+    print(word, "->", rule_based(word))
+
+
+print("\nStochastic POS Tagging:")
+
+previous = None
+
+for word in words:
+
+    tag = stochastic_tag(
+        word,
+        previous
+    )
+
+    print(word, "->", tag)
+
+    previous = tag
+
+
+print("\nTransformation-Based Tagging:")
+
+tags = transformation_tag(words)
+
+for word, tag in zip(words, tags):
+    print(word, "->", tag)
