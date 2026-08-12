@@ -1,0 +1,210 @@
+import math
+from collections import Counter
+
+print("CASE STUDY 3")
+print("=" * 55)
+
+# --------------------------------
+# 1. Initial POS Tags
+# --------------------------------
+
+words = [
+    "economic",
+    "growth",
+    "increases",
+    "employment"
+]
+
+initial_tags = [
+    "JJ",
+    "NN",
+    "NNS",
+    "NN"
+]
+
+print("\n1. INITIAL POS TAGS")
+
+for word, tag in zip(words, initial_tags):
+    print(word, "->", tag)
+
+# --------------------------------
+# 2. Transformation-Based Rule
+# --------------------------------
+# Rule:
+# Change NNS to VBZ if preceding tag is NN
+
+corrected_tags = initial_tags.copy()
+
+for i in range(1, len(words)):
+
+    if corrected_tags[i] == "NNS" and corrected_tags[i - 1] == "NN":
+        corrected_tags[i] = "VBZ"
+
+print("\n2. TRANSFORMATION RULE")
+
+print("Rule: NNS -> VBZ if preceding tag is NN")
+
+print("\nCorrected POS Tags:")
+
+for word, tag in zip(words, corrected_tags):
+    print(word, "->", tag)
+
+# --------------------------------
+# 3. Show Before and After
+# --------------------------------
+
+print("\n3. BEFORE VS AFTER")
+
+for i in range(len(words)):
+    print(
+        words[i],
+        ":",
+        initial_tags[i],
+        "->",
+        corrected_tags[i]
+    )
+
+# --------------------------------
+# 4. Word Frequency
+# --------------------------------
+
+frequency = {
+    "economic": 120,
+    "growth": 450,
+    "increases": 210,
+    "employment": 380
+}
+
+total = sum(frequency.values())
+
+print("\n4. WORD FREQUENCY DISTRIBUTION")
+
+print("Total frequency =", total)
+
+for word, count in frequency.items():
+
+    probability = count / total
+
+    print(
+        word,
+        ": Count =", count,
+        ", Probability =",
+        round(probability, 4),
+        ", Percentage =",
+        round(probability * 100, 2), "%"
+    )
+
+# --------------------------------
+# 5. Find Most Frequent Word
+# --------------------------------
+
+most_frequent = max(
+    frequency,
+    key=frequency.get
+)
+
+print("\nMost frequent word:",
+      most_frequent)
+
+print("Frequency:",
+      frequency[most_frequent])
+
+# --------------------------------
+# 6. Entropy Before Correction
+# --------------------------------
+
+# Assume two possible tags:
+# NNS = 0.5
+# VBZ = 0.5
+
+p_nns_before = 0.5
+p_vbz_before = 0.5
+
+entropy_before = -(
+    p_nns_before * math.log2(p_nns_before) +
+    p_vbz_before * math.log2(p_vbz_before)
+)
+
+print("\n5. ENTROPY BEFORE CORRECTION")
+
+print("P(NNS) =", p_nns_before)
+print("P(VBZ) =", p_vbz_before)
+
+print(
+    "Entropy =",
+    round(entropy_before, 3),
+    "bits"
+)
+
+# --------------------------------
+# 7. Entropy After Correction
+# --------------------------------
+
+p_nns_after = 0
+p_vbz_after = 1
+
+entropy_after = 0
+
+print("\n6. ENTROPY AFTER CORRECTION")
+
+print("P(NNS) =", p_nns_after)
+print("P(VBZ) =", p_vbz_after)
+
+print(
+    "Entropy =",
+    round(entropy_after, 3),
+    "bits"
+)
+
+# --------------------------------
+# 8. Accuracy Improvement
+# --------------------------------
+
+# One error was corrected out of four words.
+
+errors_before = 1
+total_words = 4
+
+accuracy_before = (
+    (total_words - errors_before) / total_words
+) * 100
+
+errors_after = 0
+
+accuracy_after = (
+    (total_words - errors_after) / total_words
+) * 100
+
+print("\n7. TAGGING ACCURACY")
+
+print(
+    "Accuracy before correction =",
+    accuracy_before,
+    "%"
+)
+
+print(
+    "Accuracy after correction =",
+    accuracy_after,
+    "%"
+)
+
+# --------------------------------
+# 9. Final Analysis
+# --------------------------------
+
+print("\n8. FINAL ANALYSIS")
+
+print("Initial:")
+print("economic/JJ growth/NN increases/NNS employment/NN")
+
+print("\nCorrected:")
+print("economic/JJ growth/NN increases/VBZ employment/NN")
+
+print("\nInterpretation:")
+print("- 'growth' is a singular noun.")
+print("- 'increases' is a third-person singular verb.")
+print("- Therefore VBZ is grammatically correct.")
+print("- Transformation-based tagging corrects the NNS error.")
+print("- Entropy decreases from 1 bit to 0 bits.")
+print("- Lower entropy indicates greater tagging confidence.")
