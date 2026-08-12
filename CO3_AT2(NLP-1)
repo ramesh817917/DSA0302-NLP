@@ -1,0 +1,150 @@
+import math
+from collections import Counter
+
+# Corpus
+text = "data science is powerful data science drives innovation data science is evolving"
+
+words = text.lower().split()
+
+# -------------------------------
+# 1. Count Unigrams, Bigrams, Trigrams
+# -------------------------------
+
+unigram = Counter(words)
+
+bigram = Counter()
+trigram = Counter()
+
+for i in range(len(words) - 1):
+    bigram[(words[i], words[i + 1])] += 1
+
+for i in range(len(words) - 2):
+    trigram[(words[i], words[i + 1], words[i + 2])] += 1
+
+# -------------------------------
+# 2. Bigram MLE
+# P(science | data)
+# -------------------------------
+
+p_science_data = (
+    bigram[("data", "science")] / unigram["data"]
+)
+
+print("CASE STUDY 1")
+print("-" * 45)
+
+print("1. Bigram MLE")
+print("P(science | data) =", round(p_science_data, 3))
+
+# -------------------------------
+# 3. Backoff Model
+# data science improves
+# -------------------------------
+
+word = "improves"
+
+if trigram[("data", "science", word)] > 0:
+    p_backoff = trigram[("data", "science", word)] / bigram[("data", "science")]
+    level = "Trigram"
+elif bigram[("science", word)] > 0:
+    p_backoff = bigram[("science", word)] / unigram["science"]
+    level = "Bigram"
+elif unigram[word] > 0:
+    p_backoff = unigram[word] / len(words)
+    level = "Unigram"
+else:
+    p_backoff = 0
+    level = "Unseen"
+
+print("\n2. Backoff Model")
+print("Sequence: data science improves")
+print("Backoff level:", level)
+print("Probability:", round(p_backoff, 3))
+
+# -------------------------------
+# 4. Deleted Interpolation
+# data science is
+# -------------------------------
+
+lambda1 = 0.5   # Trigram
+lambda2 = 0.3   # Bigram
+lambda3 = 0.2   # Unigram
+
+# Trigram probability
+p_tri = (
+    trigram[("data", "science", "is")]
+    / bigram[("data", "science")]
+)
+
+# Bigram probability
+p_bi = (
+    bigram[("science", "is")]
+    / unigram["science"]
+)
+
+# Unigram probability
+p_uni = unigram["is"] / len(words)
+
+p_interpolation = (
+    lambda1 * p_tri +
+    lambda2 * p_bi +
+    lambda3 * p_uni
+)
+
+print("\n3. Deleted Interpolation")
+
+print("Trigram probability =", round(p_tri, 3))
+print("Bigram probability  =", round(p_bi, 3))
+print("Unigram probability =", round(p_uni, 3))
+
+print("Interpolated probability =",
+      round(p_interpolation, 3))
+
+# -------------------------------
+# 5. Entropy
+# -------------------------------
+
+p_is = 0.66
+p_drives = 0.33
+
+# Normalize because 0.66 + 0.33 = 0.99
+total = p_is + p_drives
+
+p_is = p_is / total
+p_drives = p_drives / total
+
+entropy = -(
+    p_is * math.log2(p_is) +
+    p_drives * math.log2(p_drives)
+)
+
+print("\n4. Entropy")
+print("P(is) =", round(p_is, 3))
+print("P(drives) =", round(p_drives, 3))
+print("Entropy =", round(entropy, 3), "bits")
+
+# -------------------------------
+# 6. Next Word Prediction
+# -------------------------------
+
+print("\n5. Next Word Prediction")
+
+current_word = "science"
+
+candidates = {}
+
+for (w1, w2), count in bigram.items():
+    if w1 == current_word:
+        candidates[w2] = count / unigram[w1]
+
+if candidates:
+    print("After:", current_word)
+
+    for word, probability in candidates.items():
+        print(word, "->", round(probability, 3))
+
+    prediction = max(candidates, key=candidates.get)
+
+    print("Predicted next word:", prediction)
+else:
+    print("No prediction available.")
