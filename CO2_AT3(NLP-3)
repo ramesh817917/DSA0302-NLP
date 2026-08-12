@@ -1,0 +1,183 @@
+import re
+import nltk
+
+from datasets import load_dataset
+
+from nltk.stem import PorterStemmer
+from nltk.stem import WordNetLemmatizer
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+# Download WordNet
+nltk.download("wordnet")
+nltk.download("omw-1.4")
+
+# Load AG News
+print("Loading AG News...")
+
+data = load_dataset(
+    "fancyzhx/ag_news"
+)
+
+train = data["train"].select(range(10000))
+test = data["test"].select(range(2000))
+
+X_train = train["text"]
+y_train = train["label"]
+
+X_test = test["text"]
+y_test = test["label"]
+
+ps = PorterStemmer()
+lemmatizer = WordNetLemmatizer()
+
+
+# Porter stemming
+def stem_text(text):
+
+    words = re.findall(
+        r"[A-Za-z]+",
+        text.lower()
+    )
+
+    return " ".join(
+        ps.stem(word)
+        for word in words
+    )
+
+
+# Lemmatization
+def lemma_text(text):
+
+    words = re.findall(
+        r"[A-Za-z]+",
+        text.lower()
+    )
+
+    return " ".join(
+        lemmatizer.lemmatize(word)
+        for word in words
+    )
+
+
+# Classification
+def classify(train_text, test_text):
+
+    vectorizer = TfidfVectorizer(
+        stop_words="english",
+        min_df=2
+    )
+
+    Xtr = vectorizer.fit_transform(train_text)
+    Xte = vectorizer.transform(test_text)
+
+    model = LogisticRegression(
+        max_iter=1000
+    )
+
+    model.fit(Xtr, y_train)
+
+    prediction = model.predict(Xte)
+
+    accuracy = accuracy_score(
+        y_test,
+        prediction
+    )
+
+    vocabulary = len(
+        vectorizer.vocabulary_
+    )
+
+    return accuracy, vocabulary
+
+
+# 1. Without stemming
+original_train = [
+    x.lower()
+    for x in X_train
+]
+
+original_test = [
+    x.lower()
+    for x in X_test
+]
+
+acc1, vocab1 = classify(
+    original_train,
+    original_test
+)
+
+
+# 2. Porter stemming
+stem_train = [
+    stem_text(x)
+    for x in X_train
+]
+
+stem_test = [
+    stem_text(x)
+    for x in X_test
+]
+
+acc2, vocab2 = classify(
+    stem_train,
+    stem_test
+)
+
+
+# 3. Lemmatization
+lemma_train = [
+    lemma_text(x)
+    for x in X_train
+]
+
+lemma_test = [
+    lemma_text(x)
+    for x in X_test
+]
+
+acc3, vocab3 = classify(
+    lemma_train,
+    lemma_test
+)
+
+
+# Results
+print("\nRESULTS")
+print("=" * 60)
+
+print(
+    "Without Stemming :",
+    "Vocabulary =", vocab1,
+    "Accuracy =", acc1
+)
+
+print(
+    "Porter Stemming  :",
+    "Vocabulary =", vocab2,
+    "Accuracy =", acc2
+)
+
+print(
+    "Lemmatization    :",
+    "Vocabulary =", vocab3,
+    "Accuracy =", acc3
+)
+
+
+# Required words
+print("\nRequired Stemming Examples")
+print("---------------------------")
+
+words = [
+    "organization",
+    "organizer",
+    "organizing",
+    "organized",
+    "organization"
+]
+
+for word in words:
+    print(word, "->", ps.stem(word))
