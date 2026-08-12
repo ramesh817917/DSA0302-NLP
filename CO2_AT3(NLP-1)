@@ -1,0 +1,70 @@
+import re
+import pandas as pd
+from datasets import load_dataset
+from nltk.stem import PorterStemmer
+
+print("Loading PubMed 20k RCT...")
+
+dataset = load_dataset(
+    "armanc/pubmed-rct20k",
+    split="train"
+)
+
+print("Dataset loaded successfully!")
+
+# Take first 5000 sentences
+texts = dataset["text"][:5000]
+
+# Preprocessing
+words = []
+
+for text in texts:
+    tokens = re.findall(r"[A-Za-z]+", text.lower())
+    words.extend(tokens)
+
+# Remove duplicates
+words = list(dict.fromkeys(words))
+
+# Porter Stemmer
+stemmer = PorterStemmer()
+
+results = []
+
+for word in words:
+    stem = stemmer.stem(word)
+
+    if word != stem:
+        results.append([word, stem])
+
+# DataFrame
+df = pd.DataFrame(
+    results,
+    columns=["Original Word", "Stem"]
+)
+
+print("\nFirst 50 Stemming Results")
+print(df.head(50).to_string(index=False))
+
+# Required biomedical examples
+test_words = [
+    "infection",
+    "infectious",
+    "infected",
+    "infect",
+    "infecting",
+    "infections"
+]
+
+print("\nBiomedical Words")
+print("----------------")
+
+for word in test_words:
+    print(word, "->", stemmer.stem(word))
+
+# Save result
+df.to_csv(
+    "Q1_PubMed_Stemming.csv",
+    index=False
+)
+
+print("\nResult saved successfully.")
