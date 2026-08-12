@@ -1,0 +1,199 @@
+import re
+import time
+
+from nltk.stem import PorterStemmer
+
+from sklearn.datasets import fetch_20newsgroups
+
+from sklearn.model_selection import train_test_split
+
+from sklearn.feature_extraction.text import CountVectorizer
+
+from sklearn.linear_model import LogisticRegression
+
+from sklearn.metrics import accuracy_score
+
+
+# Porter Stemmer
+ps = PorterStemmer()
+
+
+# ------------------------------------
+# Load 20 Newsgroups
+# ------------------------------------
+
+data = fetch_20newsgroups(
+    subset="train",
+
+    categories=[
+        "comp.graphics",
+        "rec.sport.baseball"
+    ],
+
+    remove=[
+        "headers",
+        "footers",
+        "quotes"
+    ]
+)
+
+
+X_train, X_test, y_train, y_test = train_test_split(
+    data.data,
+    data.target,
+    test_size=0.2,
+    random_state=42
+)
+
+
+# ====================================
+# BEFORE CORRECTION
+# Feature extraction first
+# ====================================
+
+start = time.time()
+
+vectorizer1 = CountVectorizer(
+    stop_words="english",
+    min_df=2
+)
+
+X_train1 = vectorizer1.fit_transform(
+    X_train
+)
+
+X_test1 = vectorizer1.transform(
+    X_test
+)
+
+model1 = LogisticRegression(
+    max_iter=1000
+)
+
+model1.fit(
+    X_train1,
+    y_train
+)
+
+prediction1 = model1.predict(
+    X_test1
+)
+
+accuracy1 = accuracy_score(
+    y_test,
+    prediction1
+)
+
+vocab1 = len(
+    vectorizer1.vocabulary_
+)
+
+time1 = time.time() - start
+
+
+# ====================================
+# AFTER CORRECTION
+# Stemming before feature extraction
+# ====================================
+
+def preprocess(text):
+
+    words = re.findall(
+        r"[A-Za-z]+",
+        text.lower()
+    )
+
+    return " ".join(
+        ps.stem(word)
+        for word in words
+    )
+
+
+start = time.time()
+
+train_processed = [
+    preprocess(text)
+    for text in X_train
+]
+
+test_processed = [
+    preprocess(text)
+    for text in X_test
+]
+
+vectorizer2 = CountVectorizer(
+    stop_words="english",
+    min_df=2
+)
+
+X_train2 = vectorizer2.fit_transform(
+    train_processed
+)
+
+X_test2 = vectorizer2.transform(
+    test_processed
+)
+
+model2 = LogisticRegression(
+    max_iter=1000
+)
+
+model2.fit(
+    X_train2,
+    y_train
+)
+
+prediction2 = model2.predict(
+    X_test2
+)
+
+accuracy2 = accuracy_score(
+    y_test,
+    prediction2
+)
+
+vocab2 = len(
+    vectorizer2.vocabulary_
+)
+
+time2 = time.time() - start
+
+
+# ====================================
+# RESULTS
+# ====================================
+
+print("\nQUESTION 7 RESULTS")
+print("=" * 60)
+
+print(
+    "Vocabulary Before Correction:",
+    vocab1
+)
+
+print(
+    "Vocabulary After Correction :",
+    vocab2
+)
+
+print(
+    "Accuracy Before Correction  :",
+    accuracy1
+)
+
+print(
+    "Accuracy After Correction   :",
+    accuracy2
+)
+
+print(
+    "Processing Time Before      :",
+    round(time1, 4),
+    "seconds"
+)
+
+print(
+    "Processing Time After       :",
+    round(time2, 4),
+    "seconds"
+)
