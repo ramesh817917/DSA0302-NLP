@@ -1,0 +1,102 @@
+import nltk
+
+nltk.download("wordnet")
+
+from nltk.corpus import wordnet
+
+
+# ------------------------------------
+# Plural Parser
+# ------------------------------------
+
+def parser(word):
+
+    # Irregular plurals
+    irregular = {
+        "children": "child",
+        "men": "man",
+        "women": "woman",
+        "mice": "mouse",
+        "feet": "foot",
+        "teeth": "tooth",
+        "people": "person"
+    }
+
+
+    # Irregular plural
+    if word in irregular:
+
+        return irregular[word], "Plural"
+
+
+    # cities -> city
+    if word.endswith("ies"):
+
+        return word[:-3] + "y", "Plural"
+
+
+    # boxes -> box
+    if word.endswith("es"):
+
+        return word[:-2], "Plural"
+
+
+    # cars -> car
+    if word.endswith("s"):
+
+        return word[:-1], "Plural"
+
+
+    # Singular
+    return word, "Singular"
+
+
+# ------------------------------------
+# Test
+# ------------------------------------
+
+words = [
+    "car",
+    "cars",
+    "box",
+    "boxes",
+    "city",
+    "cities",
+    "child",
+    "children",
+    "dog",
+    "dogs",
+    "man",
+    "men"
+]
+
+
+print("MORPHOLOGICAL PARSER")
+print("=" * 60)
+
+for word in words:
+
+    root, word_type = parser(word)
+
+    print(
+        f"{word:<15} -> "
+        f"Root: {root:<15} "
+        f"Type: {word_type}"
+    )
+
+
+# ------------------------------------
+# WordNet
+# ------------------------------------
+
+print("\nWORDNET VERIFICATION")
+print("=" * 60)
+
+for word in words:
+
+    entries = wordnet.synsets(word)
+
+    print(
+        f"{word:<15} -> "
+        f"WordNet entries: {len(entries)}"
+    )
