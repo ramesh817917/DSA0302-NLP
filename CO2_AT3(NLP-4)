@@ -1,0 +1,95 @@
+import re
+import nltk
+
+from datasets import load_dataset
+
+from nltk.stem import PorterStemmer
+from nltk.stem import WordNetLemmatizer
+
+# WordNet
+nltk.download("wordnet")
+nltk.download("omw-1.4")
+
+# Load Amazon reviews
+print("Loading Amazon reviews...")
+
+data = load_dataset(
+    "SetFit/amazon_polarity",
+    split="train"
+)
+
+reviews = data["text"][:5000]
+
+print("Dataset loaded.")
+
+
+# Required words
+target_words = [
+    "watches",
+    "watching",
+    "washable",
+    "washer",
+    "washed"
+]
+
+
+# Search in reviews
+found = set()
+
+for review in reviews:
+
+    words = re.findall(
+        r"[A-Za-z]+",
+        review.lower()
+    )
+
+    for word in words:
+
+        if word in target_words:
+            found.add(word)
+
+print("\nWords found:")
+print(found)
+
+
+# Porter Stemmer
+ps = PorterStemmer()
+
+print("\nStemming Error Analysis")
+print("=" * 60)
+
+for word in target_words:
+
+    stem = ps.stem(word)
+
+    if word in [
+        "watches",
+        "watching",
+        "washed"
+    ]:
+        morphology = "Inflectional"
+    else:
+        morphology = "Derivational"
+
+    print(
+        word,
+        "->",
+        stem,
+        "->",
+        morphology
+    )
+
+
+# Improved strategy
+lemmatizer = WordNetLemmatizer()
+
+print("\nImproved Strategy")
+print("=" * 60)
+
+for word in target_words:
+
+    print(
+        word,
+        "->",
+        lemmatizer.lemmatize(word)
+    )
