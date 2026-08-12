@@ -1,0 +1,130 @@
+# CASE STUDY 2
+# AI-Powered Customer Support Chatbot
+
+print("CASE STUDY 2")
+print("=" * 50)
+
+# --------------------------------
+# 1. POS Tagging
+# --------------------------------
+
+sentence1 = [
+    ("Book", "VB"),
+    ("a", "DT"),
+    ("flight", "NN"),
+    ("ticket", "NN"),
+    ("now", "RB")
+]
+
+sentence2 = [
+    ("This", "DT"),
+    ("book", "NN"),
+    ("is", "VBZ"),
+    ("interesting", "JJ")
+]
+
+print("\n1. POS TAGGING")
+
+print("\nSentence 1:")
+for word, tag in sentence1:
+    print(word, "->", tag)
+
+print("\nSentence 2:")
+for word, tag in sentence2:
+    print(word, "->", tag)
+
+# --------------------------------
+# 2. HMM Probabilities
+# --------------------------------
+
+p_book_vb = 0.6
+p_book_nn = 0.4
+
+p_start_vb = 0.5
+p_start_nn = 0.5
+
+prob_vb = p_start_vb * p_book_vb
+prob_nn = p_start_nn * p_book_nn
+
+print("\n2. HMM PROBABILITY")
+
+print("P(Start -> VB) =", p_start_vb)
+print("P(book | VB) =", p_book_vb)
+
+print("P(Start -> NN) =", p_start_nn)
+print("P(book | NN) =", p_book_nn)
+
+print("\nProbability of book as VB:",
+      round(prob_vb, 3))
+
+print("Probability of book as NN:",
+      round(prob_nn, 3))
+
+if prob_vb > prob_nn:
+    print("HMM Prediction: VB")
+else:
+    print("HMM Prediction: NN")
+
+# --------------------------------
+# 3. Compare Tagging Methods
+# --------------------------------
+
+print("\n3. RULE-BASED VS HMM")
+
+print("\nRule-Based Tagging:")
+print("- Uses manually written linguistic rules")
+print("- Simple and interpretable")
+print("- Difficult to maintain for large datasets")
+
+print("\nHMM Tagging:")
+print("- Uses probabilities learned from corpus")
+print("- Handles ambiguity using context")
+print("- More suitable for large-scale NLP")
+
+# --------------------------------
+# 4. POS Tagset
+# --------------------------------
+
+print("\n4. PENN TREEBANK TAGSET")
+
+tags = {
+    "NN": "Noun",
+    "VB": "Base Verb",
+    "VBZ": "3rd person singular verb",
+    "JJ": "Adjective",
+    "RB": "Adverb",
+    "DT": "Determiner"
+}
+
+for tag, meaning in tags.items():
+    print(tag, "=", meaning)
+
+# --------------------------------
+# 5. Contextual Interpretation
+# --------------------------------
+
+print("\n5. CONTEXTUAL INTERPRETATION")
+
+print('"Book a flight ticket now."')
+print("book -> VB")
+print("Reason: Book is an imperative action.")
+
+print('\n"This book is interesting."')
+print("book -> NN")
+print("Reason: book refers to an object.")
+
+# --------------------------------
+# 6. Final Decision
+# --------------------------------
+
+print("\nFINAL RESULT")
+
+if prob_vb > prob_nn:
+    print("For the given HMM probabilities:")
+    print("book is more likely to be VB.")
+else:
+    print("book is more likely to be NN.")
+
+print("\nConclusion:")
+print("POS tagging helps the chatbot understand")
+print("user intent and generate appropriate responses.")
