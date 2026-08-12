@@ -1,0 +1,103 @@
+import pandas as pd
+import re
+
+from nltk.stem import PorterStemmer
+
+
+# Load BBC News
+data = pd.read_csv(
+    "BBCNews.csv"
+)
+
+print("Dataset loaded.")
+
+print("\nColumns:")
+print(data.columns)
+
+
+# Porter Stemmer
+ps = PorterStemmer()
+
+
+# Process complete article
+def process_text(text):
+
+    words = re.findall(
+        r"[A-Za-z]+",
+        str(text).lower()
+    )
+
+    stemmed_words = []
+
+    for word in words:
+
+        stemmed_words.append(
+            ps.stem(word)
+        )
+
+    return " ".join(stemmed_words)
+
+
+# Apply stemming
+data["Processed"] = data["Text"].apply(
+    process_text
+)
+
+
+# Compare original and stemmed
+print("\nOriginal vs Stemmed")
+print("=" * 70)
+
+print(
+    data[
+        ["Text", "Processed"]
+    ].head(10).to_string(index=False)
+)
+
+
+# 20 cases
+words = [
+    "organization",
+    "organizer",
+    "organizing",
+    "organized",
+    "organizations",
+    "organizational",
+    "running",
+    "runner",
+    "studies",
+    "studied",
+    "studying",
+    "connection",
+    "connected",
+    "connecting",
+    "easily",
+    "fairness",
+    "happiness",
+    "management",
+    "manager",
+    "development"
+]
+
+
+print("\n20 Stemming Cases")
+print("=" * 50)
+
+for word in words:
+
+    print(
+        word,
+        "->",
+        ps.stem(word)
+    )
+
+
+# Save result
+data.to_csv(
+    "BBCNews_Processed.csv",
+    index=False
+)
+
+print(
+    "\nSaved: BBCNews_Processed.csv"
+)
