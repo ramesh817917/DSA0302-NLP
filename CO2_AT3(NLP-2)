@@ -1,0 +1,171 @@
+import urllib.request
+import zipfile
+import os
+import csv
+import re
+
+# Download Sentiment140
+url = "https://cs.stanford.edu/people/alecmgo/trainingandtestdata.zip"
+
+zip_file = "sentiment140.zip"
+csv_file = "training.1600000.processed.noemoticon.csv"
+
+if not os.path.exists(csv_file):
+
+    print("Downloading Sentiment140...")
+
+    urllib.request.urlretrieve(url, zip_file)
+
+    with zipfile.ZipFile(zip_file, "r") as z:
+        z.extractall(".")
+
+    print("Download completed.")
+
+# Read first 5000 tweets
+tweets = []
+
+with open(
+    csv_file,
+    "r",
+    encoding="latin-1"
+) as file:
+
+    reader = csv.reader(file)
+
+    for i, row in enumerate(reader):
+
+        if i >= 5000:
+            break
+
+        if len(row) >= 6:
+            tweets.append(row[5])
+
+# Words given in question
+target_words = [
+    "happiest",
+    "unbelievable",
+    "running",
+    "reordering",
+    "smartphones",
+    "unreadable"
+]
+
+# Find words in dataset
+found = set()
+
+for tweet in tweets:
+
+    words = re.findall(
+        r"[A-Za-z]+",
+        tweet.lower()
+    )
+
+    for word in words:
+
+        if word in target_words:
+            found.add(word)
+
+print("\nWords found in Sentiment140:")
+print(found)
+
+
+# -------------------------------
+# Original parser
+# -------------------------------
+
+def old_parser(word):
+
+    if word.endswith("s"):
+        return word[:-1]
+
+    return word
+
+
+# -------------------------------
+# Corrected FST parser
+# -------------------------------
+
+def parser(word):
+
+    prefix = []
+    suffix = []
+
+    root = word
+
+    # Prefix transition
+    if root.startswith("un"):
+        prefix.append("un")
+        root = root[2:]
+
+    elif root.startswith("re"):
+        prefix.append("re")
+        root = root[2:]
+
+    # Suffix transition
+    if root.endswith("iest"):
+        suffix.append("iest")
+        root = root[:-4]
+
+    elif root.endswith("able"):
+        suffix.append("able")
+        root = root[:-4]
+
+    elif root.endswith("ing"):
+        suffix.append("ing")
+        root = root[:-3]
+
+    elif root.endswith("s"):
+        suffix.append("s")
+        root = root[:-1]
+
+    return root, prefix, suffix
+
+
+# Test
+print("\nCorrected FST Results:")
+print("----------------------")
+
+for word in target_words:
+
+    root, prefix, suffix = parser(word)
+
+    print(
+        word,
+        "-> Prefix:",
+        prefix,
+        "Root:",
+        root,
+        "Suffix:",
+        suffix
+    )
+
+
+# Accuracy
+expected = {
+    "happiest": "happ",
+    "unbelievable": "believ",
+    "running": "runn",
+    "reordering": "order",
+    "smartphones": "smartphone",
+    "unreadable": "read"
+}
+
+old_correct = 0
+new_correct = 0
+
+for word in expected:
+
+    if old_parser(word) == expected[word]:
+        old_correct += 1
+
+    root, prefix, suffix = parser(word)
+
+    if root == expected[word]:
+        new_correct += 1
+
+old_accuracy = old_correct / len(expected) * 100
+new_accuracy = new_correct / len(expected) * 100
+
+print("\nAccuracy:")
+print("Before correction:", old_accuracy, "%")
+print("After correction :", new_accuracy, "%")
