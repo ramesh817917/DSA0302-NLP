@@ -1,0 +1,59 @@
+# First-Order Predicate Calculus for Smart Manufacturing
+
+machines = {
+    "M1": "Active",
+    "M2": "Active",
+    "M3": "Maintenance",
+    "M4": "Active"
+}
+
+# Production relationships given for demonstration
+products = {
+    "M1": "Gear",
+    "M2": "Shaft",
+    "M3": "Gear",
+    "M4": "Bolt"
+}
+
+print("SMART MANUFACTURING")
+print("-------------------")
+
+producing = {}
+
+# Rule:
+# Active(x) -> Producing(x)
+# Maintenance(x) -> NOT Producing(x)
+
+for machine in machines:
+
+    if machines[machine] == "Active":
+        producing[machine] = True
+        print("Active(", machine, ") -> Producing(", machine, ")")
+
+    else:
+        producing[machine] = False
+        print("Maintenance(", machine, ") -> NOT Producing(", machine, ")")
+
+print("\nPRODUCT AVAILABILITY")
+print("--------------------")
+
+# Rule:
+# Produces(x,y) AND Active(x) -> Available(y)
+
+for machine in products:
+
+    product = products[machine]
+
+    if producing[machine]:
+        print(product, "-> Available")
+    else:
+        print(product, "-> Not Available")
+
+print("\nGEAR PRODUCTION")
+print("----------------")
+
+if products["M3"] == "Gear" and producing["M3"] == False:
+    print("Gear production is affected.")
+    print("Reason: M3 produces Gear but M3 is under maintenance.")
+else:
+    print("Gear production is not affected.")
