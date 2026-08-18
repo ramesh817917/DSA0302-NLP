@@ -1,0 +1,37 @@
+# CFG Tree vs Dependency Parsing
+
+sentence = "The student solved the problem."
+
+print("SENTENCE")
+print(sentence)
+
+print("\n1. CFG REPRESENTATION")
+print("S")
+print("|")
+print("+-- NP")
+print("|   +-- The")
+print("|   +-- student")
+print("|")
+print("+-- VP")
+print("    +-- solved")
+print("    +-- NP")
+print("        +-- the")
+print("        +-- problem")
+
+print("\n2. DEPENDENCY REPRESENTATION")
+print("solved")
+print(" |")
+print("+-- student (subject)")
+print("|   +-- The (determiner)")
+print("|")
+print("+-- problem (object)")
+print("    +-- the (determiner)")
+
+print("\n3. WORD RELATIONSHIPS")
+print("student -> subject of -> solved")
+print("problem -> object of  -> solved")
+
+print("\n4. CONCLUSION")
+print("CFG represents phrases and sentence structure.")
+print("Dependency parsing directly represents word relationships.")
+print("Dependency parsing is better for word-to-word relationships.")
