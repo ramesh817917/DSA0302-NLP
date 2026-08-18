@@ -1,0 +1,193 @@
+# Healthcare NLP System
+# CFG + PCFG + Feature Structures + Semantic Analysis
+
+sentence = (
+    "The doctor who reviewed the patient last week "
+    "recommends starting medication and scheduling "
+    "a follow-up visit in Chennai."
+)
+
+print("HEALTHCARE NLP SYSTEM")
+print("---------------------")
+print("Input:")
+print(sentence)
+
+# --------------------------------------------------
+# 1. TOKENIZATION
+# --------------------------------------------------
+
+print("\n1. TOKENIZATION")
+
+words = sentence.replace(".", "").split()
+
+for i, word in enumerate(words):
+    print(i + 1, ":", word)
+
+# --------------------------------------------------
+# 2. CFG ANALYSIS
+# --------------------------------------------------
+
+print("\n2. CFG ANALYSIS")
+
+print("S -> NP VP")
+print("NP -> Det N RelativeClause")
+print("RelativeClause -> who VP")
+print("VP -> V NP")
+print("VP -> V GerundPhrase")
+print("GerundPhrase -> Action AND Action")
+
+print("\nMain structure:")
+print("Doctor -> recommends -> two actions")
+
+# --------------------------------------------------
+# 3. RELATIVE CLAUSE
+# --------------------------------------------------
+
+print("\n3. RELATIVE CLAUSE ANALYSIS")
+
+print("Relative clause:")
+print("who reviewed the patient last week")
+
+print("Subject  : Doctor")
+print("Verb     : Reviewed")
+print("Object   : Patient")
+print("Time     : Last Week")
+
+# --------------------------------------------------
+# 4. FEATURE STRUCTURE
+# --------------------------------------------------
+
+print("\n4. FEATURE STRUCTURE")
+
+doctor = {
+    "PERSON": 3,
+    "NUMBER": "SINGULAR"
+}
+
+recommends = {
+    "PERSON": 3,
+    "NUMBER": "SINGULAR"
+}
+
+print("Doctor features:")
+print(doctor)
+
+print("Verb features:")
+print(recommends)
+
+if (doctor["PERSON"] == recommends["PERSON"] and
+        doctor["NUMBER"] == recommends["NUMBER"]):
+    print("Agreement: CORRECT")
+else:
+    print("Agreement: ERROR")
+
+# --------------------------------------------------
+# 5. PCFG ANALYSIS
+# --------------------------------------------------
+
+print("\n5. PCFG ANALYSIS")
+
+parse1 = 0.85
+parse2 = 0.15
+
+print("Interpretation 1 probability:", parse1)
+print("Interpretation 2 probability:", parse2)
+
+if parse1 > parse2:
+    print("Selected interpretation:")
+    print("Doctor recommends two medical actions.")
+
+# --------------------------------------------------
+# 6. MEDICAL ENTITY EXTRACTION
+# --------------------------------------------------
+
+print("\n6. MEDICAL ENTITY EXTRACTION")
+
+entities = {
+    "Doctor": "MEDICAL_PERSON",
+    "Patient": "PATIENT",
+    "Medication": "TREATMENT",
+    "Follow-up visit": "MEDICAL_ACTION",
+    "Chennai": "LOCATION",
+    "Last week": "TIME"
+}
+
+for entity, category in entities.items():
+    print(entity, "->", category)
+
+# --------------------------------------------------
+# 7. SUB-CATEGORIZATION
+# --------------------------------------------------
+
+print("\n7. SUB-CATEGORIZATION")
+
+print("RECOMMEND + ACTION")
+print("START + MEDICATION")
+print("SCHEDULE + FOLLOW-UP VISIT")
+
+# --------------------------------------------------
+# 8. EARLEY-STYLE PARTIAL STATES
+# --------------------------------------------------
+
+print("\n8. EARLEY PARSING STATES")
+
+states = [
+    "S -> NP VP .",
+    "NP -> The doctor .",
+    "RelativeClause -> who reviewed patient .",
+    "VP -> recommends ActionPhrase .",
+    "ActionPhrase -> starting medication .",
+    "ActionPhrase -> scheduling follow-up visit ."
+]
+
+for state in states:
+    print(state)
+
+# --------------------------------------------------
+# 9. SEMANTIC REPRESENTATION
+# --------------------------------------------------
+
+print("\n9. SEMANTIC REPRESENTATION")
+
+print("REVIEW(")
+print("  agent = DOCTOR,")
+print("  patient = PATIENT,")
+print("  time = LAST_WEEK")
+print(")")
+
+print("\nRECOMMEND(")
+print("  agent = DOCTOR,")
+print("  action1 = START(MEDICATION),")
+print("  action2 = SCHEDULE(FOLLOW_UP_VISIT),")
+print("  location = CHENNAI")
+print(")")
+
+# --------------------------------------------------
+# 10. STRUCTURED OUTPUT
+# --------------------------------------------------
+
+print("\n10. STRUCTURED OUTPUT")
+
+output = {
+    "reviewer": "Doctor",
+    "reviewed": "Patient",
+    "review_time": "Last Week",
+    "main_action": "Recommend",
+    "treatment": "Starting Medication",
+    "follow_up": "Schedule Follow-up Visit",
+    "location": "Chennai"
+}
+
+for key, value in output.items():
+    print(key, ":", value)
+
+# --------------------------------------------------
+# 11. FINAL RESULT
+# --------------------------------------------------
+
+print("\nFINAL RESULT")
+print("------------")
+print("Diagnosis : Not explicitly provided")
+print("Treatment : Starting medication")
+print("Follow-up : Schedule a follow-up visit")
+print("Location  : Chennai")
