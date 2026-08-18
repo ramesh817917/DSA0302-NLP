@@ -1,0 +1,57 @@
+# CFG vs PCFG vs Neural Parsing
+
+sentence = "She saw the man with a telescope."
+
+print("AMBIGUITY ANALYSIS")
+print("------------------")
+print("Sentence:", sentence)
+
+print("\n1. CFG")
+
+print("Parse 1:")
+print("She [saw the man] [with a telescope]")
+print("Meaning: She used a telescope.")
+
+print("\nParse 2:")
+print("She [saw [the man with a telescope]]")
+print("Meaning: The man had a telescope.")
+
+print("\nCFG RESULT:")
+print("CFG can generate both possible parses.")
+
+print("\n2. PCFG")
+
+parse1 = 0.70
+parse2 = 0.30
+
+print("Parse 1 probability:", parse1)
+print("Parse 2 probability:", parse2)
+
+if parse1 > parse2:
+    print("PCFG selects Parse 1.")
+else:
+    print("PCFG selects Parse 2.")
+
+print("\nPCFG uses probabilities to rank parses.")
+
+print("\n3. NEURAL PARSING")
+
+print("Input words:")
+words = sentence.split()
+
+for word in words:
+    print(word)
+
+print("\nNeural parser uses contextual information.")
+print("It can learn attachment patterns from training data.")
+
+print("\n4. COMPARISON")
+
+print("CFG    -> Generates possible structures")
+print("PCFG   -> Ranks structures using probabilities")
+print("Neural -> Uses learned contextual representations")
+
+print("\n5. CONCLUSION")
+print("For simple grammar: CFG is suitable.")
+print("For probabilistic ambiguity: PCFG is suitable.")
+print("For real-world complex language: Neural parsing is generally better.")
