@@ -1,0 +1,64 @@
+# Top-Down Parsing vs Earley Parsing
+
+sentence = "Book a flight to Delhi with a window seat"
+
+print("REAL-TIME PARSING")
+print("-----------------")
+print("Input:", sentence)
+
+print("\n1. TOP-DOWN PARSING")
+
+top_down_steps = [
+    "S -> VP",
+    "VP -> Verb NP",
+    "Verb -> Book",
+    "NP -> flight",
+    "PP -> to Delhi",
+    "PP -> with a window seat"
+]
+
+for step in top_down_steps:
+    print(step)
+
+print("\nProblem:")
+print("If a grammar rule fails, top-down parsing may backtrack.")
+
+print("\n2. EARLEY PARSING")
+
+earley_states = [
+    "S -> VP .",
+    "VP -> Verb NP .",
+    "PP -> to NP .",
+    "PP -> with NP ."
+]
+
+for state in earley_states:
+    print(state)
+
+print("\nEarley parser keeps partial states.")
+print("It can handle ambiguous and incomplete input.")
+
+print("\n3. PARTIAL INPUT")
+
+partial = "Book a flight to"
+
+print("Input:", partial)
+print("Current state:")
+print("PP -> to . NP")
+print("Waiting for destination...")
+
+print("\n4. COMPARISON")
+
+print("Top-Down:")
+print("- Uses prediction")
+print("- May require backtracking")
+print("- Less suitable for incomplete input")
+
+print("\nEarley:")
+print("- Maintains partial parsing states")
+print("- Handles ambiguity")
+print("- Handles incomplete input")
+print("- Better for dynamic applications")
+
+print("\n5. CONCLUSION")
+print("Earley parsing is more suitable for real-time dynamic input.")
