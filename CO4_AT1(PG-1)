@@ -1,0 +1,38 @@
+# Semantic Representation in Customer Support Chatbots
+
+data = [
+    ("Q1", "ACTIVATE(Roaming, Customer)",
+     "ACTIVATE(Roaming, Customer)"),
+
+    ("Q2", "DEACTIVATE(CallerTune, Customer)",
+     "ACTIVATE(CallerTune, Customer)"),
+
+    ("Q3", "QUERY(DataBalance, Customer)",
+     "QUERY(DataBalance, Customer)"),
+
+    ("Q4", "ACTIVATE(5GService, Customer)",
+     "ACTIVATE(5GService, Customer)")
+]
+
+correct = 0
+
+print("SEMANTIC REPRESENTATION ANALYSIS")
+print("--------------------------------")
+
+for q, actual, predicted in data:
+    print("\n", q)
+    print("Actual    :", actual)
+    print("Predicted :", predicted)
+
+    if actual == predicted:
+        print("Result    : Correct")
+        correct += 1
+    else:
+        print("Result    : Semantic Error")
+
+accuracy = correct / len(data) * 100
+
+print("\nTotal Queries :", len(data))
+print("Correct       :", correct)
+print("Incorrect     :", len(data) - correct)
+print("Accuracy      :", accuracy, "%")
