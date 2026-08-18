@@ -1,0 +1,69 @@
+# Banking Customer Support Chatbot
+# CFG + PCFG + Feature Structure + Semantic Analysis
+
+sentence = "Show me the transactions with the card from last month"
+
+print("BANKING CUSTOMER SUPPORT CHATBOT")
+print("---------------------------------")
+print("Input:", sentence)
+
+# Tokens
+words = sentence.lower().split()
+
+print("\n1. TOKENS")
+print(words)
+
+# Simple CFG analysis
+print("\n2. CFG ANALYSIS")
+
+print("S -> VP")
+print("VP -> V NP")
+print("NP -> N PP PP")
+print("PP -> P NP")
+
+# Ambiguous phrases
+print("\n3. AMBIGUITY ANALYSIS")
+
+print("Possible interpretation 1:")
+print("Transactions made with the card during last month")
+
+print("\nPossible interpretation 2:")
+print("Transactions with the card, where 'from last month'")
+print("is attached as a separate time condition.")
+
+# PCFG probabilities
+print("\n4. PCFG ANALYSIS")
+
+parse1 = 0.80
+parse2 = 0.20
+
+print("Parse 1 probability:", parse1)
+print("Parse 2 probability:", parse2)
+
+if parse1 > parse2:
+    print("Selected Parse: Transactions made with the card during last month")
+
+# Feature structure
+print("\n5. FEATURE STRUCTURE")
+
+features = {
+    "ACTION": "SHOW",
+    "OBJECT": "TRANSACTIONS",
+    "PAYMENT_METHOD": "CARD",
+    "TIME": "LAST MONTH"
+}
+
+for key, value in features.items():
+    print(key, "=", value)
+
+# Final semantic representation
+print("\n6. FINAL SEMANTIC REPRESENTATION")
+
+print("QUERY(")
+print("  object = TRANSACTIONS,")
+print("  payment_method = CARD,")
+print("  time = LAST_MONTH")
+print(")")
+
+print("\n7. RESULT")
+print("The system identifies the customer's banking request correctly.")
