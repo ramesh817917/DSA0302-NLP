@@ -1,0 +1,90 @@
+# Voice Assistant Flight Booking
+# Top-Down vs Earley-style Parsing
+
+sentence = "Book a flight to Delhi with a window seat"
+
+print("VOICE ASSISTANT FLIGHT BOOKING")
+print("------------------------------")
+print("Input:", sentence)
+
+# Top-down parsing
+print("\n1. TOP-DOWN PARSING")
+
+print("S")
+print("|")
+print("VP")
+print("|")
+print("Book + NP")
+print("|")
+print("flight + PP")
+print("|")
+print("to Delhi")
+
+print("\nPossible attachment:")
+print("with a window seat -> flight")
+
+print("\nTop-down parser may try multiple rules")
+print("and may backtrack when a rule fails.")
+
+# Ambiguity
+print("\n2. AMBIGUITY ANALYSIS")
+
+print("Parse 1:")
+print("Book [a flight to Delhi] [with a window seat]")
+
+print("\nParse 2:")
+print("Book [a flight [to Delhi with a window seat]]")
+
+print("\nMost likely meaning:")
+print("Destination = Delhi")
+print("Seat = Window")
+
+# Earley-style state chart
+print("\n3. EARLEY PARSING")
+
+states = [
+    "S -> VP .",
+    "VP -> V NP .",
+    "NP -> flight PP .",
+    "PP -> to NP .",
+    "PP -> with NP ."
+]
+
+for state in states:
+    print(state)
+
+print("\nEarley parsing keeps multiple possible states")
+print("instead of restarting the complete parse.")
+
+# Partial input
+print("\n4. PARTIAL INPUT")
+
+partial = "Book a flight to"
+
+print("Input:", partial)
+print("Parser state:")
+print("VP -> Book NP .")
+print("PP -> to . NP")
+print("Waiting for destination...")
+
+# Comparison
+print("\n5. PERFORMANCE COMPARISON")
+
+print("Top-Down Parsing:")
+print("- Simple for simple grammar")
+print("- Backtracking can increase")
+print("  processing time")
+
+print("\nEarley Parsing:")
+print("- Handles ambiguity")
+print("- Handles incomplete input")
+print("- Avoids repeated complete parsing")
+print("- Suitable for conversational input")
+
+# Final semantic representation
+print("\n6. FINAL SEMANTIC REPRESENTATION")
+
+print("BOOK_FLIGHT(")
+print("  destination = DELHI,")
+print("  seat = WINDOW")
+print(")")
