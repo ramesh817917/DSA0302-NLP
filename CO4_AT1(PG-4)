@@ -1,0 +1,61 @@
+# Syntax-Driven Semantic Analysis in Healthcare
+
+sentences = [
+    {
+        "sentence": "Doctor prescribed medicine to patient.",
+        "roles": [
+            ("Doctor", "Agent"),
+            ("Medicine", "Theme"),
+            ("Patient", "Recipient")
+        ]
+    },
+
+    {
+        "sentence": "Patient reported severe headache.",
+        "roles": [
+            ("Patient", "Experiencer"),
+            ("Headache", "Symptom")
+        ]
+    },
+
+    {
+        "sentence": "Nurse monitored patient continuously.",
+        "roles": [
+            ("Nurse", "Agent"),
+            ("Patient", "Theme")
+        ]
+    },
+
+    {
+        "sentence": "Medicine reduced blood pressure.",
+        "roles": [
+            ("Medicine", "Cause"),
+            ("Blood Pressure", "Affected Entity")
+        ]
+    }
+]
+
+print("HEALTHCARE SEMANTIC ANALYSIS")
+print("----------------------------")
+
+for item in sentences:
+
+    print("\nSentence:", item["sentence"])
+    print("Semantic Roles:")
+
+    for entity, role in item["roles"]:
+        print(entity, "->", role)
+
+print("\nROLE ERROR ANALYSIS")
+print("-------------------")
+
+given_role = "Instrument"
+correct_role = "Theme"
+
+print("Given role for Medicine :", given_role)
+print("Correct role            :", correct_role)
+
+if given_role != correct_role:
+    print("Error: Incorrect semantic role detected.")
+else:
+    print("Role is correct.")
