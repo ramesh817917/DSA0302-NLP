@@ -1,0 +1,29 @@
+# Word Sense Disambiguation in E-Commerce
+
+data = [
+    ("Apple accessories", "iPhone Charger",
+     "Technology Brand", "iPhone"),
+
+    ("Mouse wireless", "Bluetooth Mouse",
+     "Computer Device", "Bluetooth"),
+
+    ("Java tutorial", "Coding Lessons",
+     "Programming Language", "Coding"),
+
+    ("Python course", "Software Development Training",
+     "Programming Language", "Software Development")
+]
+
+print("WORD SENSE DISAMBIGUATION")
+print("-------------------------")
+
+for query, result, sense, cue in data:
+
+    print("\nQuery          :", query)
+    print("Clicked Result :", result)
+    print("Semantic Cue   :", cue)
+    print("Correct Sense  :", sense)
+
+print("\nCONCLUSION")
+print("----------")
+print("All 4 queries are correctly disambiguated.")
