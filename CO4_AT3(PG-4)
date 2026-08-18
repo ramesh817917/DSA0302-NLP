@@ -1,0 +1,76 @@
+# Feature Structures vs Subcategorization Frames
+
+print("FEATURE STRUCTURES AND SUBCATEGORIZATION")
+print("------------------------------------------")
+
+# ------------------------------------------------
+# Feature Structure
+# ------------------------------------------------
+
+print("\n1. FEATURE STRUCTURE")
+
+subject = {
+    "WORD": "student",
+    "PERSON": 3,
+    "NUMBER": "singular"
+}
+
+verb = {
+    "WORD": "writes",
+    "PERSON": 3,
+    "NUMBER": "singular"
+}
+
+print("Subject:", subject)
+print("Verb   :", verb)
+
+if (subject["PERSON"] == verb["PERSON"] and
+        subject["NUMBER"] == verb["NUMBER"]):
+    print("Agreement: CORRECT")
+else:
+    print("Agreement: ERROR")
+
+# Incorrect example
+print("\nIncorrect Example")
+
+wrong_verb = {
+    "WORD": "write",
+    "PERSON": 3,
+    "NUMBER": "plural"
+}
+
+print("Subject:", subject)
+print("Verb   :", wrong_verb)
+
+if (subject["NUMBER"] == wrong_verb["NUMBER"]):
+    print("Agreement: CORRECT")
+else:
+    print("Agreement: ERROR")
+
+# ------------------------------------------------
+# Subcategorization
+# ------------------------------------------------
+
+print("\n2. SUBCATEGORIZATION FRAMES")
+
+frames = {
+    "eat": "NP",
+    "give": "NP + NP",
+    "sleep": "No Object",
+    "recommend": "Action"
+}
+
+for verb, frame in frames.items():
+    print(verb, "->", frame)
+
+print("\nExamples:")
+
+print("eat -> The patient ate medicine.")
+print("give -> Doctor gave medicine to patient.")
+print("sleep -> The patient slept.")
+print("recommend -> Doctor recommends treatment.")
+
+print("\n3. CONCLUSION")
+print("Feature structures enforce agreement.")
+print("Subcategorization frames enforce verb argument structure.")
+print("Using both provides better grammatical checking.")
