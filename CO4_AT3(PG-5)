@@ -1,0 +1,96 @@
+# Transition-Based vs Graph-Based Dependency Parsing
+
+sentence = "The student solved problems"
+
+words = sentence.split()
+
+print("DEPENDENCY PARSING")
+print("------------------")
+print("Sentence:", sentence)
+
+# ------------------------------------------------
+# Transition-Based Parsing
+# ------------------------------------------------
+
+print("\n1. TRANSITION-BASED PARSING")
+
+stack = []
+buffer = words.copy()
+
+print("Initial Buffer:", buffer)
+
+# SHIFT The
+stack.append(buffer.pop(0))
+print("\nSHIFT")
+print("Stack :", stack)
+print("Buffer:", buffer)
+
+# SHIFT student
+stack.append(buffer.pop(0))
+print("\nSHIFT")
+print("Stack :", stack)
+print("Buffer:", buffer)
+
+# SHIFT solved
+stack.append(buffer.pop(0))
+print("\nSHIFT")
+print("Stack :", stack)
+print("Buffer:", buffer)
+
+# RIGHT ARC
+print("\nRIGHT-ARC")
+print("student -> subject -> solved")
+
+# SHIFT problems
+stack.append(buffer.pop(0))
+print("\nSHIFT")
+print("Stack :", stack)
+print("Buffer:", buffer)
+
+# RIGHT ARC
+print("\nRIGHT-ARC")
+print("problems -> object -> solved")
+
+print("\nTransition-based parser makes local decisions step by step.")
+
+# ------------------------------------------------
+# Graph-Based Parsing
+# ------------------------------------------------
+
+print("\n2. GRAPH-BASED PARSING")
+
+print("Possible dependency relationships:")
+
+edges = [
+    ("student", "solved", "subject"),
+    ("problems", "solved", "object"),
+    ("The", "student", "determiner")
+]
+
+for dependent, head, relation in edges:
+    print(dependent, "->", relation, "->", head)
+
+print("\nGraph-based parser evaluates possible edges")
+print("and selects the best complete dependency tree.")
+
+# ------------------------------------------------
+# Comparison
+# ------------------------------------------------
+
+print("\n3. COMPARISON")
+
+print("Transition-Based:")
+print("- Local decisions")
+print("- Very fast")
+print("- Low memory")
+print("- Suitable for large datasets")
+
+print("\nGraph-Based:")
+print("- Global decisions")
+print("- Considers complete tree")
+print("- Higher computational cost")
+print("- Can provide strong global structure")
+
+print("\n4. CONCLUSION")
+print("For large-scale applications requiring high speed,")
+print("transition-based parsing is generally more suitable.")
