@@ -1,0 +1,19 @@
+dialog = input("Enter a dialog: ").lower()
+
+if "hello" in dialog or "hi" in dialog:
+    print("Dialog Act: Greeting")
+
+elif "?" in dialog:
+    print("Dialog Act: Question")
+
+elif "please" in dialog:
+    print("Dialog Act: Request")
+
+elif "thank" in dialog:
+    print("Dialog Act: Thanks")
+
+elif "bye" in dialog or "goodbye" in dialog:
+    print("Dialog Act: Goodbye")
+
+else:
+    print("Dialog Act: Statement")
