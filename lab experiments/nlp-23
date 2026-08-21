@@ -1,0 +1,35 @@
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+text = input("Enter text: ")
+
+sentences = text.split(".")
+
+sentences = [s.strip() for s in sentences if s.strip()]
+
+if len(sentences) < 2:
+    print("Enter at least two sentences.")
+else:
+    vectorizer = TfidfVectorizer()
+    vectors = vectorizer.fit_transform(sentences)
+
+    scores = []
+
+    for i in range(len(sentences) - 1):
+        score = cosine_similarity(
+            vectors[i],
+            vectors[i + 1]
+        )[0][0]
+
+        scores.append(score)
+        print("Sentence", i + 1, "and", i + 2,
+              "similarity:", round(score, 2))
+
+    average = sum(scores) / len(scores)
+
+    print("\nAverage Coherence Score:", round(average, 2))
+
+    if average > 0.1:
+        print("Text is reasonably coherent")
+    else:
+        print("Text has low coherence")
