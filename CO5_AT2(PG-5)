@@ -1,0 +1,83 @@
+def source_analysis(sentence):
+
+    return {
+        "event": "PLAY",
+        "agent": "BOY",
+        "theme": "FOOTBALL",
+        "tense": "PRESENT",
+        "aspect": "PROGRESSIVE"
+    }
+
+
+def generate_candidates():
+
+    return [
+        {
+            "translation": "लड़का फुटबॉल खेल रहा है।",
+            "lm_score": 0.95,
+            "tm_score": 0.96
+        },
+        {
+            "translation": "फुटबॉल लड़का खेल रहा है।",
+            "lm_score": 0.40,
+            "tm_score": 0.70
+        },
+        {
+            "translation": "लड़का खेल रहा है फुटबॉल।",
+            "lm_score": 0.30,
+            "tm_score": 0.50
+        }
+    ]
+
+
+def select_best_translation(candidates):
+
+    best_candidate = None
+    highest_score = -1
+
+    for candidate in candidates:
+
+        lm = candidate["lm_score"]
+        tm = candidate["tm_score"]
+
+        # Combined statistical score
+        score = (0.5 * lm) + (0.5 * tm)
+
+        candidate["combined_score"] = score
+
+        if score > highest_score:
+            highest_score = score
+            best_candidate = candidate
+
+    return best_candidate
+
+
+# Source sentence
+source_sentence = "The boy is playing football."
+
+# Step 1 and 2: Source analysis + Interlingua
+interlingua = source_analysis(source_sentence)
+
+# Step 3: Generate translation candidates
+candidates = generate_candidates()
+
+# Step 4: Statistical scoring
+best_translation = select_best_translation(candidates)
+
+print("SOURCE SENTENCE:")
+print(source_sentence)
+
+print("\nINTERLINGUA REPRESENTATION:")
+for key, value in interlingua.items():
+    print(key + ":", value)
+
+print("\nTRANSLATION CANDIDATES:")
+for candidate in candidates:
+    print(candidate["translation"])
+    print("LM Score:", candidate["lm_score"])
+    print("TM Score:", candidate["tm_score"])
+    print("Combined Score:", round(candidate["combined_score"], 3))
+    print()
+
+print("FINAL TRANSLATION:")
+print(best_translation["translation"])
