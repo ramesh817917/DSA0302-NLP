@@ -1,0 +1,130 @@
+# Q3: Machine Translation
+# Discourse Structure, Predicate Logic and Interpretation
+
+
+def source_analysis(sentence):
+    return {
+        "Agent": "boy",
+        "Action": "play",
+        "Object": "football",
+        "Tense": "present",
+        "Aspect": "progressive"
+    }
+
+
+def create_predicate_logic(data):
+    logic = (
+        f"PLAY({data['Agent']}, {data['Object']}) "
+        f"AND TENSE(PRESENT) "
+        f"AND ASPECT(PROGRESSIVE)"
+    )
+
+    return logic
+
+
+def create_interlingua(data):
+    return {
+        "event": "PLAY",
+        "agent": "BOY",
+        "theme": "FOOTBALL",
+        "tense": "PRESENT",
+        "aspect": "PROGRESSIVE"
+    }
+
+
+def generate_candidates():
+    return [
+        {
+            "sentence": "लड़का फुटबॉल खेल रहा है।",
+            "lm_score": 0.95,
+            "tm_score": 0.96
+        },
+        {
+            "sentence": "फुटबॉल लड़का खेल रहा है।",
+            "lm_score": 0.40,
+            "tm_score": 0.70
+        },
+        {
+            "sentence": "लड़का खेल रहा है फुटबॉल।",
+            "lm_score": 0.30,
+            "tm_score": 0.50
+        }
+    ]
+
+
+def select_best_translation(candidates):
+    best_candidate = None
+    best_score = 0
+
+    for candidate in candidates:
+        score = (
+            0.5 * candidate["lm_score"]
+            + 0.5 * candidate["tm_score"]
+        )
+
+        candidate["combined_score"] = score
+
+        if score > best_score:
+            best_score = score
+            best_candidate = candidate
+
+    return best_candidate
+
+
+# Source sentence
+source = "The boy is playing football."
+
+print("MACHINE TRANSLATION SYSTEM")
+print("-" * 50)
+
+print("Source Sentence:")
+print(source)
+
+
+# Step 1: Source Analysis
+data = source_analysis(source)
+
+print("\n1. SOURCE ANALYSIS")
+for key, value in data.items():
+    print(f"{key}: {value}")
+
+
+# Step 2: Predicate Logic
+logic = create_predicate_logic(data)
+
+print("\n2. PREDICATE LOGIC REPRESENTATION")
+print(logic)
+
+
+# Step 3: Interlingua
+interlingua = create_interlingua(data)
+
+print("\n3. INTERLINGUA REPRESENTATION")
+for key, value in interlingua.items():
+    print(f"{key}: {value}")
+
+
+# Step 4: Candidate Generation
+candidates = generate_candidates()
+
+print("\n4. TRANSLATION CANDIDATES")
+
+for candidate in candidates:
+    print(candidate["sentence"])
+
+
+# Step 5: Statistical Selection
+best = select_best_translation(candidates)
+
+print("\n5. STATISTICAL SCORES")
+
+for candidate in candidates:
+    print(
+        f"{candidate['sentence']} "
+        f"--> Combined Score: {candidate['combined_score']:.3f}"
+    )
+
+
+print("\nFINAL TRANSLATION")
+print("-" * 50)
+print(best["sentence"])
