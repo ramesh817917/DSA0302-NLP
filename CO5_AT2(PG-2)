@@ -1,0 +1,53 @@
+def analyze_coherence(sentences):
+
+    connective_map = {
+        "therefore": "Cause-Effect",
+        "because": "Cause-Effect",
+        "then": "Sequence",
+        "after that": "Sequence",
+        "for example": "Elaboration",
+        "however": "Contrast",
+        "but": "Contrast"
+    }
+
+    relations = []
+
+    for i in range(len(sentences) - 1):
+
+        s1 = sentences[i]
+        s2 = sentences[i + 1]
+
+        relation = "Sequence"
+        s2_lower = s2.lower()
+
+        # Check explicit connectives
+        for connective, relation_type in connective_map.items():
+            if connective in s2_lower:
+                relation = relation_type
+                break
+
+        relations.append({
+            "Sentence 1": s1,
+            "Sentence 2": s2,
+            "Relation": relation
+        })
+
+    return relations
+
+
+sentences = [
+    "The roads were flooded after heavy rainfall.",
+    "Therefore, schools were closed for the day.",
+    "Students attended classes online."
+]
+
+result = analyze_coherence(sentences)
+
+print("TEXT COHERENCE ANALYSIS")
+print("-" * 50)
+
+for item in result:
+    print("Sentence 1:", item["Sentence 1"])
+    print("Sentence 2:", item["Sentence 2"])
+    print("Relation:", item["Relation"])
+    print()
