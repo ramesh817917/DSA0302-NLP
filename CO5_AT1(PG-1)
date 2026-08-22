@@ -1,0 +1,88 @@
+# Q1: Discourse, Reference Resolution and Text Coherence
+
+import re
+
+def resolve_references(text):
+    entities = {
+        "Ravi": {"gender": "male", "number": "singular", "type": "person"},
+        "Arun": {"gender": "male", "number": "singular", "type": "person"},
+        "library": {"gender": "neutral", "number": "singular", "type": "place"},
+        "book": {"gender": "neutral", "number": "singular", "type": "object"}
+    }
+
+    # Coreference mapping
+    references = {
+        "He": "Ravi",
+        "it": "book"
+    }
+
+    resolved_text = text
+
+    for pronoun, entity in references.items():
+        resolved_text = re.sub(
+            r"\b" + pronoun + r"\b",
+            entity,
+            resolved_text
+        )
+
+    return resolved_text, references
+
+
+def analyze_coherence(sentences):
+    relations = []
+
+    for i in range(len(sentences) - 1):
+        s1 = sentences[i]
+        s2 = sentences[i + 1].lower()
+
+        if "therefore" in s2 or "because" in s2:
+            relation = "Cause-Effect"
+
+        elif "however" in s2 or "but" in s2:
+            relation = "Contrast"
+
+        elif "for example" in s2:
+            relation = "Elaboration"
+
+        else:
+            relation = "Sequence"
+
+        relations.append((sentences[i], sentences[i + 1], relation))
+
+    return relations
+
+
+# Reference Resolution
+text = "Ravi met Arun at the library. He borrowed a book and later returned it."
+
+resolved_text, references = resolve_references(text)
+
+print("REFERENCE RESOLUTION")
+print("-" * 50)
+print("Original Text:")
+print(text)
+
+print("\nResolved Text:")
+print(resolved_text)
+
+print("\nCoreference Chains:")
+for pronoun, entity in references.items():
+    print(f"{entity} --> {pronoun}")
+
+
+# Text Coherence
+sentences = [
+    "The roads were flooded after heavy rainfall.",
+    "Therefore, schools were closed for the day.",
+    "Students attended classes online."
+]
+
+relations = analyze_coherence(sentences)
+
+print("\nTEXT COHERENCE ANALYSIS")
+print("-" * 50)
+
+for s1, s2, relation in relations:
+    print(f"\nSentence 1: {s1}")
+    print(f"Sentence 2: {s2}")
+    print(f"Relation: {relation}")
