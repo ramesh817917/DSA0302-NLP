@@ -1,0 +1,50 @@
+def generate_sentence(action, agent, obj, tense):
+
+    # Step 1: Lexical selection
+    verb_lemma = action.lower()
+    subject = "The " + agent.lower()
+    object_np = "a " + obj.lower()
+
+    # Step 2: Morphological realization
+    irregular_verbs = {
+        "buy": "bought",
+        "go": "went",
+        "eat": "ate",
+        "write": "wrote"
+    }
+
+    if tense.lower() == "past":
+
+        if verb_lemma in irregular_verbs:
+            verb = irregular_verbs[verb_lemma]
+        else:
+            verb = verb_lemma + "ed"
+
+    else:
+        verb = verb_lemma
+
+    # Step 3: Sentence structuring - SVO
+    sentence = subject + " " + verb + " " + object_np
+
+    # Step 4: Surface realization
+    sentence = sentence.capitalize() + "."
+
+    return sentence
+
+
+# Semantic input
+action = "Buy"
+agent = "Student"
+obj = "Book"
+tense = "Past"
+
+sentence = generate_sentence(action, agent, obj, tense)
+
+print("SEMANTIC REPRESENTATION:")
+print("Action:", action)
+print("Agent:", agent)
+print("Object:", obj)
+print("Tense:", tense)
+
+print("\nGENERATED SENTENCE:")
+print(sentence)
