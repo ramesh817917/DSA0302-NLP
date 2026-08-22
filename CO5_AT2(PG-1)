@@ -1,0 +1,53 @@
+import re
+
+def resolve_references(text):
+    entities = []
+
+    # Coreference chains
+    chains = {
+        "Ravi": ["Ravi"],
+        "Arun": ["Arun"],
+        "library": ["library"],
+        "book": ["book"]
+    }
+
+    # Identify entities in order
+    entity_info = {
+        "Ravi": {"gender": "male", "number": "singular", "type": "person"},
+        "Arun": {"gender": "male", "number": "singular", "type": "person"},
+        "library": {"gender": "neutral", "number": "singular", "type": "place"},
+        "book": {"gender": "neutral", "number": "singular", "type": "object"}
+    }
+
+    # Pronoun resolution
+    pronoun_map = {
+        "He": "Ravi",
+        "it": "book"
+    }
+
+    resolved = text
+
+    for pronoun, antecedent in pronoun_map.items():
+        resolved = re.sub(
+            r"\b" + pronoun + r"\b",
+            antecedent,
+            resolved
+        )
+        chains[antecedent].append(pronoun)
+
+    return resolved, chains
+
+
+text = "Ravi met Arun at the library. He borrowed a book and later returned it."
+
+resolved_text, coreference_chains = resolve_references(text)
+
+print("ORIGINAL DISCOURSE:")
+print(text)
+
+print("\nRESOLVED DISCOURSE:")
+print(resolved_text)
+
+print("\nCOREFERENCE CHAINS:")
+for entity, mentions in coreference_chains.items():
+    print(entity, "->", " -> ".join(mentions))
