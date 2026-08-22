@@ -1,0 +1,90 @@
+# Q2: Dialog and Conversational Agents
+# Discourse Planning and Surface Realization
+
+
+def classify_dialogue_act(utterance):
+    text = utterance.lower().strip()
+
+    # Request
+    if text.startswith("can you") or text.startswith("could you") or text.startswith("please"):
+        return "Request"
+
+    # Question
+    elif "?" in text or text.startswith(
+        ("where", "when", "what", "why", "how")
+    ):
+        return "Question"
+
+    # Inform
+    elif text.startswith("i want") or text.startswith("i would like") or text.startswith("i am"):
+        return "Inform"
+
+    # Confirmation / Action
+    elif "has been booked" in text or "is confirmed" in text:
+        return "Confirmation / Action"
+
+    else:
+        return "Inform"
+
+
+def discourse_planning(dialogue_acts):
+    plan = []
+
+    for act in dialogue_acts:
+        if act == "Request":
+            plan.append("Identify user goal")
+
+        elif act == "Question":
+            plan.append("Collect missing information")
+
+        elif act == "Inform":
+            plan.append("Store user-provided information")
+
+        elif act == "Confirmation / Action":
+            plan.append("Complete task and confirm result")
+
+    return plan
+
+
+def surface_realization(action, destination):
+    if action == "book_train":
+        return f"Your train ticket to {destination} has been booked."
+
+    return "Task completed."
+
+
+conversation = [
+    ("User", "Can you book a train ticket for me?"),
+    ("Agent", "Sure, where would you like to travel?"),
+    ("User", "I want to go to Chennai."),
+    ("Agent", "Your ticket has been booked.")
+]
+
+acts = []
+
+print("DIALOGUE ACT RECOGNITION")
+print("-" * 50)
+
+for speaker, utterance in conversation:
+    act = classify_dialogue_act(utterance)
+    acts.append(act)
+
+    print(f"Speaker: {speaker}")
+    print(f"Utterance: {utterance}")
+    print(f"Dialogue Act: {act}\n")
+
+
+print("DISCOURSE PLAN")
+print("-" * 50)
+
+plan = discourse_planning(acts)
+
+for i, step in enumerate(plan, start=1):
+    print(f"{i}. {step}")
+
+
+print("\nSURFACE REALIZATION")
+print("-" * 50)
+
+sentence = surface_realization("book_train", "Chennai")
+print(sentence)
