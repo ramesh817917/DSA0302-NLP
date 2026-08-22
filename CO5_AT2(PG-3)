@@ -1,0 +1,63 @@
+def classify_dialogue_act(utterance):
+
+    text = utterance.lower().strip()
+
+    # Request
+    if text.startswith("can you"):
+        return "Request"
+
+    elif text.startswith("could you"):
+        return "Request"
+
+    elif text.startswith("please"):
+        return "Request"
+
+    # Question
+    elif "?" in text:
+        return "Question"
+
+    # Inform
+    elif text.startswith("i want"):
+        return "Inform"
+
+    elif text.startswith("i would like"):
+        return "Inform"
+
+    elif text.startswith("i am"):
+        return "Inform"
+
+    # Confirmation / Action
+    elif "has been booked" in text:
+        return "Confirmation / Action"
+
+    elif "confirmed" in text:
+        return "Confirmation"
+
+    else:
+        return "Inform"
+
+
+conversation = [
+    ("User", "Can you book a train ticket for me?"),
+    ("Agent", "Sure, where would you like to travel?"),
+    ("User", "I want to go to Chennai."),
+    ("Agent", "Your ticket has been booked.")
+]
+
+print("DIALOGUE ACT RECOGNITION")
+print("-" * 50)
+
+acts = []
+
+for speaker, utterance in conversation:
+
+    act = classify_dialogue_act(utterance)
+    acts.append(act)
+
+    print("Speaker:", speaker)
+    print("Utterance:", utterance)
+    print("Dialogue Act:", act)
+    print()
+
+print("DIALOGUE ACT SEQUENCE:")
+print(" -> ".join(acts))
